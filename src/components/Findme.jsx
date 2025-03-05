@@ -185,9 +185,9 @@ const FindMe = () => {
     //     {position && <Marker position={position} />}
     //   </GoogleMap>
     // </LoadScript>
-    <div className="google-container" style={{width: "500px"}}>
+    <div className="google-container" style={{width: "500px", height:"100vh"}}>
       <GoogleMap
-        mapContainerStyle={containerStyle}
+        mapContainerStyle={{width:"375px", height:"100vh"}}
         center={center}
         zoom={13}
         // onLoad={onLoad}

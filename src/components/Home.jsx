@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const [location, setLocation] = useState({ lat: null, lng: null });
+    const [link, setLink] = useState("")
     const navigate = useNavigate();
     const getLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -13,8 +14,8 @@ const Home = () => {
     };
 
     const generateLink = () => {
-        const link = `/findme?latitude=${location.lat}&longitude=${location.lng}`;
-        navigate(link)
+        const link = `${window.location.origin}/findme?latitude=${location.lat}&longitude=${location.lng}`;
+        setLink(link)
     };
 
     return (
@@ -22,6 +23,7 @@ const Home = () => {
             <h1>Home Page</h1>
             <button onClick={getLocation}>Get Location</button>
             <button onClick={generateLink} disabled={!location.lat}>Generate Link</button>
+            <p>{link}</p>
         </div>
     );
 };
