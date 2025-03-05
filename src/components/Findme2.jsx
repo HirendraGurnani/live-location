@@ -72,7 +72,7 @@ console.log(position);
       const interval = setInterval(fetchLocation, 3000); // Update every 5 seconds
 
       return () => clearInterval(interval);
-    }, [isLoaded]);
+    }, [isLoaded, originP]);
 
   //   console.log(origin);
 
