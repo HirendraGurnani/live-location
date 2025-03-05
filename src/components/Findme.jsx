@@ -20,8 +20,9 @@ const FindMe = () => {
   const [polylinePath, setPolylinePath] = useState([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const latitude = parseFloat(searchParams.get("latitude"));
-  const longitude = parseFloat(searchParams.get("longitude"));
+  const latitude = Number(searchParams.get("latitude"));
+  const longitude = Number(searchParams.get("longitude"));
+  const [map, setMap] = useState()
 console.log(location.pathname);
 
 
@@ -43,14 +44,9 @@ console.log(location.pathname);
     if (!isLoaded) return;
     const fetchLocation = () => {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            console.log(position);
+        navigator.geolocation.getCurrentPosition((position) => {
 
-            setOrigin({
-              lat: position?.coords?.latitude,
-              lng: position?.coords?.longitude,
-            });
+          setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
           },
           (error) => console.error("Error fetching location:", error),
           { enableHighAccuracy: true }
@@ -171,6 +167,11 @@ console.log(location.pathname);
     }
     return points;
   };
+  const onLoad = (mapInstance) => {
+
+    setMap(mapInstance);
+
+  }
   if (!isLoaded) return <p>Loading map...</p>;
   return (
     // <LoadScript
@@ -191,13 +192,13 @@ console.log(location.pathname);
         mapContainerStyle={{width:"375px", height:"100vh"}}
         center={center}
         zoom={13}
-        // onLoad={onLoad}
+        onLoad={onLoad}
       >
         {/* Start and End Markers */}
         {route && (
           <>
             <Marker
-              position={{ lat: origin?.lat, lng: origin?.lng }}
+              position={{ lat: origin.lat, lng: origin.lng }}
               label="Start"
             />
             <Marker position={{ lat: latitude, lng: longitude }} label="End" />
