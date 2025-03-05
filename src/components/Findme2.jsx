@@ -26,7 +26,7 @@ const FindMe = () => {
       longitude: parseFloat(param.get("longitude")),
     });
   }, []);
-  const [originP, setOriginP] = useState({ lat: null, lng: null });
+  const [originP, setOriginP] = useState({ lat: 22.73136818389452, lng: 75.89770251008306 });
   const [route, setRoute] = useState(null);
   const [polylinePath, setPolylinePath] = useState([]);
   const location = useLocation();
@@ -51,28 +51,28 @@ const FindMe = () => {
 
   //   const [position, setPosition] = useState(null);
 
-    useEffect(() => {
-      if (!isLoaded) return;
-      const fetchLocation = () => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-console.log(position);
+//     useEffect(() => {
+//       if (!isLoaded) return;
+//       const fetchLocation = () => {
+//         if (navigator.geolocation) {
+//           navigator.geolocation.getCurrentPosition((position) => {
+// console.log(position);
 
-            setOriginP({ lat: position?.coords?.latitude, lng: position?.coords?.longitude });
-            },
-            (error) => console.error("Error fetching location:", error),
-            { enableHighAccuracy: true }
-          );
-        } else {
-          console.error("Geolocation is not supported by this browser.");
-        }
-      };
+//             setOriginP({ lat: position?.coords?.latitude, lng: position?.coords?.longitude });
+//             },
+//             (error) => console.error("Error fetching location:", error),
+//             { enableHighAccuracy: true }
+//           );
+//         } else {
+//           console.error("Geolocation is not supported by this browser.");
+//         }
+//       };
 
-      fetchLocation(); // Initial call
-      const interval = setInterval(fetchLocation, 3000); // Update every 5 seconds
+//       fetchLocation(); // Initial call
+//       const interval = setInterval(fetchLocation, 3000); // Update every 5 seconds
 
-      return () => clearInterval(interval);
-    }, [isLoaded, originP]);
+//       return () => clearInterval(interval);
+//     }, [isLoaded, originP]);
 
   //   console.log(origin);
 
