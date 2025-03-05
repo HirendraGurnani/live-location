@@ -19,6 +19,8 @@ const FindMe = () => {
   const [route, setRoute] = useState(null);
   const [polylinePath, setPolylinePath] = useState([]);
   const [searchParams] = useSearchParams();
+  console.log(searchParams.get("latitude"));
+  
   const latitude = parseFloat(searchParams.get("latitude"));
   const longitude = parseFloat(searchParams.get("longitude"));
   const location = useLocation();
@@ -91,7 +93,7 @@ const FindMe = () => {
           {
             origin: {
               location: {
-                latLng: { latitude: origin.lat, longitude: origin.lng },
+                latLng: { latitude: origin?.lat, longitude: origin?.lng },
               },
             },
             destination: {
@@ -196,7 +198,7 @@ const FindMe = () => {
         {route && (
           <>
             <Marker
-              position={{ lat: origin.lat, lng: origin.lng }}
+              position={{ lat: origin?.lat, lng: origin?.lng }}
               label="Start"
             />
             <Marker position={{ lat: latitude, lng: longitude }} label="End" />

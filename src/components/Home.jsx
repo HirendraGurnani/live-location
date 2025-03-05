@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
     const [location, setLocation] = useState({ lat: null, lng: null });
     const [link, setLink] = useState("")
-    const navigate = useNavigate();
     const getLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
             // const { latitude, longitude } = position.coords;
