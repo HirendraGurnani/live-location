@@ -6,7 +6,7 @@ import {
   Marker,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const containerStyle = {
@@ -15,16 +15,26 @@ const containerStyle = {
 };
 
 const FindMe = () => {
-  const [origin, setOrigin] = useState(null);
+  let [dest, setDesti] = useState({ latitude: null, longitude: null });
+
+  let [param] = useSearchParams();
+  useEffect(() => {
+    // console.log("**************",param.get("latitude"))
+    // console.log("**************",param.get("longitude"))
+    setDesti({
+      latitude: parseFloat(param.get("latitude")),
+      longitude: parseFloat(param.get("longitude")),
+    });
+  }, []);
+  const [originP, setOriginP] = useState({ lat: null, lng: null });
   const [route, setRoute] = useState(null);
   const [polylinePath, setPolylinePath] = useState([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const latitude = parseFloat(searchParams.get("latitude"));
   const longitude = parseFloat(searchParams.get("longitude"));
-  const [map, setMap] = useState()
-console.log(location.pathname);
-
+  //   const [map, setMap] = useState()
+  // console.log(location.pathname);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCk0htx320UYoMkyh-UiGkUY2c4jrNvsZg",
@@ -34,35 +44,37 @@ console.log(location.pathname);
     lat: latitude,
     lng: longitude,
   };
-  console.log(center);
+
+  //   console.log(center);
 
   //   const [map, setMap] = useState(null);
 
   //   const [position, setPosition] = useState(null);
 
-  useEffect(() => {
-    if (!isLoaded) return;
-    const fetchLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
+    useEffect(() => {
+      if (!isLoaded) return;
+      const fetchLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+console.log(position);
 
-          setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
-          },
-          (error) => console.error("Error fetching location:", error),
-          { enableHighAccuracy: true }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
-    };
+            setOriginP({ lat: position?.coords?.latitude, lng: position?.coords?.longitude });
+            },
+            (error) => console.error("Error fetching location:", error),
+            { enableHighAccuracy: true }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+        }
+      };
 
-    fetchLocation(); // Initial call
-    const interval = setInterval(fetchLocation, 3000); // Update every 5 seconds
+      fetchLocation(); // Initial call
+      const interval = setInterval(fetchLocation, 3000); // Update every 5 seconds
 
-    return () => clearInterval(interval);
-  }, [isLoaded]);
+      return () => clearInterval(interval);
+    }, [isLoaded]);
 
-  console.log(origin);
+  //   console.log(origin);
 
   //   useEffect(() => {
   // if (navigator.geolocation) {
@@ -88,12 +100,12 @@ console.log(location.pathname);
           {
             origin: {
               location: {
-                latLng: { latitude: origin?.lat, longitude: origin?.lng },
+                latLng: { latitude: originP.lat, longitude: originP.lng },
               },
             },
             destination: {
               location: {
-                latLng: { latitude: latitude, longitude: longitude },
+                latLng: { latitude: dest.latitude, longitude: dest.longitude },
               },
             },
             travelMode: "DRIVE",
@@ -131,7 +143,7 @@ console.log(location.pathname);
     };
 
     fetchRoute();
-  }, [isLoaded, origin]);
+  }, [isLoaded, originP]);
 
   // Function to decode the encoded polyline into an array of lat/lng points
   const decodePolyline = (encoded) => {
@@ -167,11 +179,11 @@ console.log(location.pathname);
     }
     return points;
   };
-  const onLoad = (mapInstance) => {
+  //   const onLoad = (mapInstance) => {
 
-    setMap(mapInstance);
+  //     setMap(mapInstance);
 
-  }
+  //   }
   if (!isLoaded) return <p>Loading map...</p>;
   return (
     // <LoadScript
@@ -187,22 +199,30 @@ console.log(location.pathname);
     //     {position && <Marker position={position} />}
     //   </GoogleMap>
     // </LoadScript>
-    <div className="google-container" style={{width: "500px", height:"100vh"}}>
+    <div
+      className="google-container"
+      style={{ width: "500px", height: "50vh" }}
+    >
+      {/* <h1>{dest.latitude}</h1>
+        <h1>{dest.longitude}</h1> */}
       <GoogleMap
-        mapContainerStyle={{width:"375px", height:"100vh"}}
+        mapContainerStyle={{ width: "375px", height: "100vh" }}
         center={center}
         zoom={13}
-        onLoad={onLoad}
+        // onLoad={onLoad}
       >
         {/* Start and End Markers */}
         {route && (
           <>
             <Marker
-              position={{ lat: origin.lat, lng: origin.lng }}
+              position={{ lat: originP.lat, lng: originP.lng }}
               label="Start"
             />
-            <Marker position={{ lat: latitude, lng: longitude }} label="End" />
             {/* {position && <Marker position={position} label="End" />} */}
+            <Marker
+              position={{ lat: dest.latitude, lng: dest.longitude }}
+              label="End"
+            />
           </>
         )}
 
