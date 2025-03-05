@@ -6,7 +6,7 @@ import {
   Marker,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const containerStyle = {
@@ -18,13 +18,12 @@ const FindMe = () => {
   const [origin, setOrigin] = useState(null);
   const [route, setRoute] = useState(null);
   const [polylinePath, setPolylinePath] = useState([]);
-  const [searchParams] = useSearchParams();
-  console.log(searchParams.get("latitude"));
-  
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const latitude = parseFloat(searchParams.get("latitude"));
   const longitude = parseFloat(searchParams.get("longitude"));
-  const location = useLocation();
-  //   console.log(location.pathname);
+console.log(location.pathname);
+
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCk0htx320UYoMkyh-UiGkUY2c4jrNvsZg",
