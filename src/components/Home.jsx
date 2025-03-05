@@ -13,7 +13,7 @@ const Home = () => {
     };
 
     const generateLink = () => {
-        const link = `${window.location.origin}/findme?latitude=${location.lat}&longitude=${location.lng}`;
+        const link = `${window.location.origin}/findme2?latitude=${location.lat}&longitude=${location.lng}`;
         setLink(link)
     };
 
